@@ -4,6 +4,9 @@ wallThickness = 4;
 height = 8;
 seed = round(getNextRand(10000));
 
+defaultDataWidth = 8; // used if data is not provided
+defaultDataLength = 8; // used if data is not provided
+
 heightVariation = 4; // height adder
 fillPossibility = 0.4; // 0-1 possibility of filling a hexagon
 
@@ -47,7 +50,7 @@ module hex(height, diameter = diameter, wallThickness = wallThickness)
 	}
 }
 
-module fillHex(height, seed, diameter = diameter, wallThickness = wallThickness)
+module fillHex(data, height, seed, diameter = diameter, wallThickness = wallThickness)
 {
 	scale = .50;
 	subDiameter = diameter * scale;
@@ -135,7 +138,7 @@ module buildFromData(data, height, seed, triggerValue, fill = false)
 					{
 						difference()
 						{
-							fillHex(height - heightVariation, nextSeed[3]);
+							fillHex(data, height - heightVariation, nextSeed[3]);
 							translate([-xOffset, -yOffset / 2, -.01])
 								buildLimiters(getLimiters(data, x, y), height * 2, x % 2);
 						}
@@ -146,7 +149,22 @@ module buildFromData(data, height, seed, triggerValue, fill = false)
 	}
 }
 
+function getRandomData(seed) = 
+	let (values = getNextRandMulti(defaultDataWidth * defaultDataLength, 2, seed))
+	[for (xx = [0:defaultDataWidth - 1]) ([for (yy = [0:defaultDataLength - 1]) (round(values[xx * defaultDataWidth + yy])) ]) ];
+
 xOffset = diameter * .75;
 yOffset = sqrt(3) / 2 * diameter;
-translate([-len(data) * xOffset / 2, -len(data[0]) * yOffset / 2, 0])
-	buildFromData(data, height, seed, 1);
+
+if (data)
+{
+	translate([-len(data) * xOffset / 2, -len(data[0]) * yOffset / 2, 0])
+		buildFromData(data, height, seed, 1);
+}
+else
+{
+	randData = getRandomData(seed);
+	echo (randData);
+	translate([-len(randData) * xOffset / 2, -len(randData[0]) * yOffset / 2, 0])
+		buildFromData(randData, height, seed, 1);
+}
