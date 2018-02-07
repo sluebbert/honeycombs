@@ -39,4 +39,5 @@ These values are determined by the provided image to the script. The provided im
 
 ##### honeycombs.scad
 This OpenSCAD script converts the outputted 2d array from the honeycombs.py script into a 3d model of joined up hexagons. Within this script, you can set the size of the hexagons, how likely they are to fill, and how much variation there is in their height.
-Use of this script alone without any 2d array input, will render a randomly generated grid of hexagons. You can use this to play around with the various variables within the script.
+
+Use of this script alone without any 2d array input will render a randomly generated grid of hexagons. You can use this to play around with the various variables within the script.
