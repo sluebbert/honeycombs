@@ -1,16 +1,33 @@
 
+// Diameter of each starting hexagon
 diameter = 16;
+
+// Wall thickness of starting hexagons
 wallThickness = 4;
+
+// Base height of starting hexagons
 height = 8;
-seed = round(getNextRand(10000));
 
-defaultDataWidth = 8; // used if data is not provided
-defaultDataLength = 8; // used if data is not provided
+// Seed value to seed use of Random with. Set to -1 to use random seed.
+seed = -1;
 
-heightVariation = 4; // height adder
-fillPossibility = 0.4; // 0-1 possibility of filling a hexagon
+//////////////////////////////////////////////////////////////////
+// Used if no data is provided (targeting Thingiverse Customizer)
 
-echo (str("SEED: ", seed));
+// Number of hexagons wide
+defaultDataWidth = 8;
+// Number of hexagons length
+defaultDataLength = 8;
+//////////////////////////////////////////////////////////////////
+
+// Amount of height variation randomly added to each hexagon
+heightVariation = 4;
+
+// 0-1 possibility of filling a hexagon
+fillPossibility = 0.4; // [0:.01:1]
+
+actualSeed = seed == -1 ? round(getNextRand(100000)) : seed;
+echo (str("SEED: ", actualSeed));
 
 function getNextRand(limit = 1, seed = -1) = 
 	getNextRandMulti(1, limit, seed)[0];
@@ -159,12 +176,12 @@ yOffset = sqrt(3) / 2 * diameter;
 if (data)
 {
 	translate([-len(data) * xOffset / 2, -len(data[0]) * yOffset / 2, 0])
-		buildFromData(data, height, seed, 1);
+		buildFromData(data, height, actualSeed, 1);
 }
 else
 {
-	randData = getRandomData(seed);
+	randData = getRandomData(actualSeed);
 	echo (randData);
 	translate([-len(randData) * xOffset / 2, -len(randData[0]) * yOffset / 2, 0])
-		buildFromData(randData, height, seed, 1);
+		buildFromData(randData, height, actualSeed, 1);
 }
